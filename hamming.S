@@ -51,17 +51,17 @@ main		adr		r1, data
 		
 		
 decode
-		;store needed registers to stack
+		;store	needed registers to stack
 		str		r1, [sp, #-4]!
 		str		r2, [sp, #-4]!
 		str		r3, [sp, #-4]!
 		str		r4, [sp, #-4]!
-		str		r1, [sp, #-4]!;;needed to balence out stack use
+		str		r1, [sp, #-4]! ;;needed to balence out stack use
 		mov		r0,  #0b001011100000000
 		orr		r0, r0, #0b1111111
 		and		r0, r0, r1
-		str		r1, [sp, #-4]!;;saved to manage correct stack postions
-		str		r2, [sp, #-4]!;;for call to prodeuce a ham code form tranmited data
+		str		r1, [sp, #-4]! ;;saved to manage correct stack postions
+		str		r2, [sp, #-4]! ;;for call to prodeuce a ham code form tranmited data
 		mov		r1, r0
 		mov		r4, lr ;save lr to beable to retuen to main when finished
 		bl		hen2
@@ -70,9 +70,9 @@ decode
 		beq		crct ;compare and branch if the tranmited code met even parity
 		adr		r2, onee
 		str		r1, [r2]
-		;check for correct parity bit
-		;if parity is not met the bit is added to 
-		;a register that is used to show position of bad bit r3. (p4,p3,p2,p1)
+		;check	for correct parity bit
+		;if		parity is not met the bit is added to
+		;a		register that is used to show position of bad bit r3. (p4,p3,p2,p1)
 		mov		r0, #0b101010100000000 ;mask and check for p1
 		orr		r0, r0, #0b1010101
 		and		r0, r0, r1
@@ -112,14 +112,14 @@ loop4	lsrs		r0, r0, #1
 		orr		r3, r2, r3
 		adr		r2, berr
 		str		r3, [r2] ;store position of bad parity bit
-		;;starts to shift out the mask for bad bit by decrementing the position every shift right
+		;;starts	to shift out the mask for bad bit by decrementing the position every shift right
 		subs		r3, r3, #1
 		mov		r0, #0b100000000000000
 loop5	lsrne	r0, r0, #1
 		subsne	r3, r3, #1
 		
 		bne		loop5
-		;correct bad bit and reformat to original data only format
+		;correct	bad bit and reformat to original data only format
 		eor		r0, r0, r1
 		and		r1, r0, #0b000000001111111
 		and		r2, r0, #0b000011100000000
@@ -142,7 +142,7 @@ crct
 		str		r1, [r2]
 		mov		lr, r4
 		mov		pc, lr
-hencode	
+hencode
 		str		r1, [sp, #-4]!
 		str		r2, [sp, #-4]!
 		;expand	to make room for parity bits
@@ -153,7 +153,7 @@ hencode
 		add		r1, r1, r2, lsl #1
 		and		r2, r0, #0b10000000000
 		add		r1, r1, r2, lsl #2
-		;parity tree
+		;parity	tree
 hen2		;parity	bit 1
 		eor		r2, r1, r1, lsl #2
 		eor		r2, r2, r2, lsl #4
